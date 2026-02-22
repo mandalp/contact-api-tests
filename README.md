@@ -4,7 +4,7 @@
 
 ## Overview
 
-This repository contains an automated API test suite for the Contact List application.
+This repository contains an automated API test suite for the [Contact List application](https://thinking-tester-contact-list.herokuapp.com/) - [[API Documentation](https://documenter.getpostman.com/view/4012288/TzK2bEa8#abe537df-fccc-4ee6-90d2-7513e3024d6b)].
 
 The purpose of this project is to demonstrate structured API validation, negative testing strategy, boundary analysis, and CI integration using Postman and GitHub Actions.
 
