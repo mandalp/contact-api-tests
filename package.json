@@ -1,0 +1,24 @@
+{
+  "name": "contact-api-tests",
+  "version": "1.0.0",
+  "description": "API testing using Postman and Newman",
+  "main": "index.js",
+  "scripts": {
+    "test": "newman run collections/ContactList.postman_collection.json -e environments/ContactEnvironment.postman_environment.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mandalp/contact-api-tests.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/mandalp/contact-api-tests/issues"
+  },
+  "homepage": "https://github.com/mandalp/contact-api-tests#readme",
+  "devDependencies": {
+    "newman": "^6.2.2"
+  }
+}

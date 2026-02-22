@@ -1,0 +1,2192 @@
+{
+  "info": {
+    "_postman_id": "ff73eab8-71ff-4797-a326-a96bcfaba60e",
+    "name": "Contact List",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "6632990"
+  },
+  "item": [
+    {
+      "name": "Basic Endpoint Tests",
+      "item": [
+        {
+          "name": "Add User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"firstName\": \"Test\",\n    \"lastName\": \"User\",\n    \"email\": \"amanda2@fake.com\",\n    \"password\": \"myPassword\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/users",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "var jsonData = pm.response.json();",
+                  "",
+                  "pm.environment.set(\"token\", jsonData.token);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"amanda@fake.com\",\n    \"password\": \"myPassword\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/users/login",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "users",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Contact List",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",              
+                  "pm.test(\"Content-Type is a json\", function () {",
+                  "    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8\");",
+                  "});",
+                  "",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/contacts",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "contacts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Contact",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "",
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"amanda@fake.com\",\n    \"password\": \"myPassword\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/contacts/{{contactId}}",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "contacts",
+                "{{contactId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add Contact",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "pm.environment.set(\"contactId\", jsonData._id);",
+                  "",
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"firstName\": \"{{firstName}}\",\n    \"lastName\": \"{{lastName}}\",\n    \"birthdate\": \"{{birthDate}}\",\n    \"email\": \"{{validemail}}\",\n    \"phone\": \"{{phone}}\",\n    \"street1\": \"{{street1}}\",\n    \"street2\": \"{{street2}}\",\n    \"city\": \"{{city}}\",\n    \"stateProvince\": \"{{stateProvince}}\",\n    \"postalCode\": \"{{postalCode}}\",\n    \"country\": \"{{country}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/contacts",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "contacts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Contact",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"firstName\": \"{{firstName}}\",\n    \"lastName\": \"{{lastName}}\",\n    \"birthdate\": \"{{birthDate}}\",\n    \"email\": \"{{validemail}}\",\n    \"phone\": \"{{phone}}\",\n    \"street1\": \"{{street1}}\",\n    \"street2\": \"{{street2}}\",\n    \"city\": \"{{city}}\",\n    \"stateProvince\": \"{{stateProvince}}\",\n    \"postalCode\": \"{{postalCode}}\",\n    \"country\": \"{{country}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/contacts/{{contactId}}",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "contacts",
+                "{{contactId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Contact",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"firstName\": \"{{firstName}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/contacts/{{contactId}}",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "contacts",
+                "{{contactId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Contact",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/contacts/{{contactId}}",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "contacts",
+                "{{contactId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Negative Tests",
+      "item": [
+        {
+          "name": "Add Contact",
+          "item": [
+            {
+              "name": "Settup - Add Contact",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var jsonData = pm.response.json();",
+                      "pm.environment.set(\"contactId\", jsonData._id);",
+                      "",
+                      "pm.test(\"Status code is 201\", function () {",
+                      "    pm.response.to.have.status(201);",
+                      "});",
+                      "",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"firstName\": \"{{firstName}}\",\n    \"lastName\": \"{{lastName}}\",\n    \"birthdate\": \"{{birthDate}}\",\n    \"email\": \"{{validemail}}\",\n    \"phone\": \"{{phone}}\",\n    \"street1\": \"{{street1}}\",\n    \"street2\": \"{{street2}}\",\n    \"city\": \"{{city}}\",\n    \"stateProvince\": \"{{stateProvince}}\",\n    \"postalCode\": \"{{postalCode}}\",\n    \"country\": \"{{country}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/contacts",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "contacts"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Missing Required Field  (FirstName)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "",
+                      "const res = pm.response.json();",
+                      "",
+                      "pm.test(\"Status should be 400\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"firstName error should exist\", function () {",
+                      "    pm.expect(res.errors).to.have.property(\"firstName\");",
+                      "});",
+                      "",
+                      "pm.test(\"firstName should be required type\", function () {",
+                      "    pm.expect(res.errors.firstName.kind).to.eql(\"required\");",
+                      "});",
+                      "",
+                      "",
+                      "",
+                      "",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"firstName\": \"\",\n    \"lastName\": \"Test\",\n    \"birthdate\": \"1970-01-01\",\n    \"email\": \"contact1@fake.com\",\n    \"phone\": \"8005555555\",\n    \"street1\": \"1 Main St.\",\n    \"street2\": \"Apartment A\",\n    \"city\": \"Anytown\",\n    \"stateProvince\": \"KS\",\n    \"postalCode\": \"12345\",\n    \"country\": \"USA\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/contacts",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "contacts"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Missing Required Field  (LastName)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "",
+                      "const res = pm.response.json();",
+                      "",
+                      "pm.test(\"Status should be 400\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"lastName error should exist\", function () {",
+                      "    pm.expect(res.errors).to.have.property(\"lastName\");",
+                      "});",
+                      "",
+                      "pm.test(\"lastName should be required type\", function () {",
+                      "    pm.expect(res.errors.lastName.kind).to.eql(\"required\");",
+                      "});",
+                      "",
+                      "",
+                      "",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"firstName\": \"{{firstName}}\",\n    \"lastName\": \"  \",\n    \"birthdate\": \"1970-01-01\",\n    \"email\": \"contact1@fake.com\",\n    \"phone\": \"8005555555\",\n    \"street1\": \"1 Main St.\",\n    \"street2\": \"Apartment A\",\n    \"city\": \"Anytown\",\n    \"stateProvince\": \"KS\",\n    \"postalCode\": \"12345\",\n    \"country\": \"USA\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/contacts",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "contacts"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Missing Required Field  (Both)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const res = pm.response.json();",
+                      "",
+                      "pm.test(\"Status should be 400\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"firstName error should exist\", function () {",
+                      "    pm.expect(res.errors).to.have.property(\"firstName\");",
+                      "});",
+                      "",
+                      "pm.test(\"lastName error should exist\", function () {",
+                      "    pm.expect(res.errors).to.have.property(\"lastName\");",
+                      "});",
+                      "",
+                      "pm.test(\"firstName should be required type\", function () {",
+                      "    pm.expect(res.errors.firstName.kind).to.eql(\"required\");",
+                      "});",
+                      "",
+                      "pm.test(\"lastName should be required type\", function () {",
+                      "    pm.expect(res.errors.lastName.kind).to.eql(\"required\");",
+                      "});",
+                      "",
+                      "pm.test(\"Should contain exactly 2 validation errors\", function () {",
+                      "    pm.expect(Object.keys(res.errors).length).to.eql(2);",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"firstName\": \"\",\n    \"lastName\": \"\",\n    \"birthdate\": \"1970-01-01\",\n    \"email\": \"contact1@fake.com\",\n    \"phone\": \"8005555555\",\n    \"street1\": \"1 Main St.\",\n    \"street2\": \"Apartment A\",\n    \"city\": \"Anytown\",\n    \"stateProvince\": \"KS\",\n    \"postalCode\": \"12345\",\n    \"country\": \"USA\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/contacts",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "contacts"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Long Last Name",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const res = pm.response.json();",
+                      "",
+                      "pm.test(\"Status should be 400\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"lastName error should exist\", function () {",
+                      "    pm.expect(res.errors).to.have.property(\"lastName\");",
+                      "});",
+                      "",
+                      "pm.test(\"Error type should be maxlength\", function () {",
+                      "    pm.expect(res.errors.lastName.kind).to.eql(\"maxlength\");",
+                      "});",
+                      "",
+                      "pm.test(\"Maximum length should be 20\", function () {",
+                      "    pm.expect(res.errors.lastName.properties.maxlength).to.eql(20);",
+                      "});",
+                      "",
+                      "pm.test(\"Returned invalid value should match sent value\", function () {",
+                      "    pm.expect(res.errors.lastName.value)",
+                      "        .to.eql(\"This is a long last name to test\");",
+                      "});",
+                      "",
+                      "pm.test(\"Should contain exactly 1 validation error\", function () {",
+                      "    pm.expect(Object.keys(res.errors).length).to.eql(1);",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"firstName\": \"Contact 1\",\n    \"lastName\": \"{{longLastName}}\",\n    \"birthdate\": \"1970-01-01\",\n    \"email\": \"contact1@fake.com\",\n    \"phone\": \"8005555555\",\n    \"street1\": \"1 Main St.\",\n    \"street2\": \"Apartment A\",\n    \"city\": \"Anytown\",\n    \"stateProvince\": \"KS\",\n    \"postalCode\": \"12345\",\n    \"country\": \"USA\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/contacts",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "contacts"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Long First Name",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const res = pm.response.json();",
+                      "",
+                      "pm.test(\"Status should be 400\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"firstName error should exist\", function () {",
+                      "    pm.expect(res.errors).to.have.property(\"firstName\");",
+                      "});",
+                      "",
+                      "pm.test(\"Error type should be maxlength\", function () {",
+                      "    pm.expect(res.errors.firstName.kind).to.eql(\"maxlength\");",
+                      "});",
+                      "",
+                      "pm.test(\"Maximum length should be 20\", function () {",
+                      "    pm.expect(res.errors.firstName.properties.maxlength).to.eql(20);",
+                      "});",
+                      "",
+                      "pm.test(\"Returned invalid value should match sent value\", function () {",
+                      "    pm.expect(res.errors.firstName.value)",
+                      "        .to.eql(\"This is a long first name to test\");",
+                      "});",
+                      "",
+                      "pm.test(\"Should contain exactly 1 validation error\", function () {",
+                      "    pm.expect(Object.keys(res.errors).length).to.eql(1);",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"firstName\": \"{{longFirtsName}}\",\n    \"lastName\": \"Contact 1\",\n    \"birthdate\": \"1970-01-01\",\n    \"email\": \"contact1@fake.com\",\n    \"phone\": \"8005555555\",\n    \"street1\": \"1 Main St.\",\n    \"street2\": \"Apartment A\",\n    \"city\": \"Anytown\",\n    \"stateProvince\": \"KS\",\n    \"postalCode\": \"12345\",\n    \"country\": \"USA\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/contacts",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "contacts"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Invalid Birth Date",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const res = pm.response.json();",
+                      "",
+                      "pm.test(\"Status should be 400\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"Birthdate error should exist\", function () {",
+                      "    pm.expect(res.errors).to.have.property(\"birthdate\");",
+                      "});",
+                      "",
+                      "pm.test(\"Error kind should be user defined\", function () {",
+                      "    pm.expect(res.errors.birthdate.kind).to.eql(\"user defined\");",
+                      "});",
+                      "",
+                      "pm.test(\"Error message should indicate invalid birthdate\", function () {",
+                      "    pm.expect(res.errors.birthdate.message).to.include(\"invalid\");",
+                      "});",
+                      "",
+                      "pm.test(\"Returned invalid value should match sent value\", function () {",
+                      "    pm.expect(res.errors.birthdate.value).to.eql(\"1977-02-29\");",
+                      "});",
+                      "",
+                      "pm.test(\"Should contain exactly 1 validation error\", function () {",
+                      "    pm.expect(Object.keys(res.errors).length).to.eql(1);",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"firstName\": \"{{firstname}}\",\n    \"lastName\": \"{{lastname}}\",\n    \"birthdate\": \"{{invalidBirthDate}}\",\n    \"email\": \"contact1@fake.com\",\n    \"phone\": \"8005555555\",\n    \"street1\": \"1 Main St.\",\n    \"street2\": \"Apartment A\",\n    \"city\": \"Anytown\",\n    \"stateProvince\": \"KS\",\n    \"postalCode\": \"12345\",\n    \"country\": \"USA\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/contacts",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "contacts"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Invalid Email",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const res = pm.response.json();",
+                      "",
+                      "pm.test(\"Status should be 400\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"Email error should exist\", function () {",
+                      "    pm.expect(res.errors).to.have.property(\"email\");",
+                      "});",
+                      "",
+                      "pm.test(\"Error kind should be user defined\", function () {",
+                      "    pm.expect(res.errors.email.kind).to.eql(\"user defined\");",
+                      "});",
+                      "",
+                      "pm.test(\"Error message should indicate invalid email\", function () {",
+                      "    pm.expect(res.errors.email.message).to.include(\"invalid\");",
+                      "});",
+                      "",
+                      "pm.test(\"Returned invalid value should match sent value\", function () {",
+                      "    pm.expect(res.errors.email.value).to.eql(\"email.com\");",
+                      "});",
+                      "",
+                      "pm.test(\"Should contain exactly 1 validation error\", function () {",
+                      "    pm.expect(Object.keys(res.errors).length).to.eql(1);",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"firstName\": \"{{firstname}}\",\n    \"lastName\": \"{{lastname}}\",\n    \"birthdate\": \"{{birthDate}}\",\n    \"email\": \"{{invalidEmail}}\",\n    \"phone\": \"8005555555\",\n    \"street1\": \"1 Main St.\",\n    \"street2\": \"Apartment A\",\n    \"city\": \"Anytown\",\n    \"stateProvince\": \"KS\",\n    \"postalCode\": \"12345\",\n    \"country\": \"USA\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/contacts",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "contacts"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Invalid Phone Number",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const res = pm.response.json();",
+                      "",
+                      "pm.test(\"Status should be 400\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"Phone error should exist\", function () {",
+                      "    pm.expect(res.errors).to.have.property(\"phone\");",
+                      "});",
+                      "",
+                      "pm.test(\"Error kind should be user defined\", function () {",
+                      "    pm.expect(res.errors.phone.kind).to.eql(\"user defined\");",
+                      "});",
+                      "",
+                      "pm.test(\"Error message should indicate invalid phone\", function () {",
+                      "    pm.expect(res.errors.phone.message).to.include(\"invalid\");",
+                      "});",
+                      "",
+                      "pm.test(\"Invalid value should be 12\", function () {",
+                      "    pm.expect(res.errors.phone.value).to.eql(\"12\");",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"firstName\": \"{{firstName}}\",\n    \"lastName\": \"{{lastName}}\",\n    \"birthdate\": \"{{birthdate}}\",\n    \"email\": \"{{validemail}}\",\n    \"phone\": \"{{invalidPhone}}\",\n    \"street1\": \"1 Main St.\",\n    \"street2\": \"Apartment A\",\n    \"city\": \"Anytown\",\n    \"stateProvince\": \"KS\",\n    \"postalCode\": \"12345\",\n    \"country\": \"USA\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/contacts",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "contacts"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Long Street Name",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const res = pm.response.json();",
+                      "",
+                      "pm.test(\"Status should be 400\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"street1 error should exist\", function () {",
+                      "    pm.expect(res.errors).to.have.property(\"street1\");",
+                      "});",
+                      "",
+                      "pm.test(\"Error type should be maxlength\", function () {",
+                      "    pm.expect(res.errors.street1.kind).to.eql(\"maxlength\");",
+                      "});",
+                      "",
+                      "pm.test(\"Maximum length should be 40\", function () {",
+                      "    pm.expect(res.errors.street1.properties.maxlength).to.eql(40);",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"firstName\": \"{{firstname}}\",\n    \"lastName\": \"{{lastname}}\",\n    \"birthdate\": \"{{birthdate}}\",\n    \"email\": \"{{validemail}}\",\n    \"phone\": \"8005555555\",\n    \"street1\": \"{{longStreetName}}\",\n    \"street2\": \"Apartment A\",\n    \"city\": \"Anytown\",\n    \"stateProvince\": \"KS\",\n    \"postalCode\": \"12345\",\n    \"country\": \"USA\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/contacts",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "contacts"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Invalid Postal Code",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const res = pm.response.json();",
+                      "",
+                      "pm.test(\"Status should be 400\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"PostalCode error should exist\", function () {",
+                      "    pm.expect(res.errors).to.have.property(\"postalCode\");",
+                      "});",
+                      "",
+                      "pm.test(\"Error kind should be user defined\", function () {",
+                      "    pm.expect(res.errors.postalCode.kind).to.eql(\"user defined\");",
+                      "});",
+                      "",
+                      "pm.test(\"Error message should indicate invalid postal code\", function () {",
+                      "    pm.expect(res.errors.postalCode.message).to.include(\"invalid\");",
+                      "});",
+                      "",
+                      "pm.test(\"Returned invalid value should match sent value\", function () {",
+                      "    pm.expect(res.errors.postalCode.value).to.eql(\"12\");",
+                      "});",
+                      "",
+                      "pm.test(\"Should contain exactly 1 validation error\", function () {",
+                      "    pm.expect(Object.keys(res.errors).length).to.eql(1);",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"firstName\": \"{{firstname}}\",\n    \"lastName\": \"{{lastname}}\",\n    \"birthdate\": \"{{birthDate}}\",\n    \"email\": \"{{validemail}}\",\n    \"phone\": \"8005555555\",\n    \"street1\": \"1 Main St.\",\n    \"street2\": \"Apartment A\",\n    \"city\": \"Anytown\",\n    \"stateProvince\": \"KS\",\n    \"postalCode\": \"12\",\n    \"country\": \"USA\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/contacts",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "contacts"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Update Contact",
+          "item": [
+            {
+              "name": "Missing Required Field  (FirstName)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "",
+                      "const res = pm.response.json();",
+                      "",
+                      "pm.test(\"Status should be 400\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"firstName error should exist\", function () {",
+                      "    pm.expect(res.errors).to.have.property(\"firstName\");",
+                      "});",
+                      "",
+                      "pm.test(\"firstName should be required type\", function () {",
+                      "    pm.expect(res.errors.firstName.kind).to.eql(\"required\");",
+                      "});",
+                      "",
+                      "",
+                      "",
+                      "",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"firstName\": \"\",\n    \"lastName\": \"Test\",\n    \"birthdate\": \"1970-01-01\",\n    \"email\": \"contact1@fake.com\",\n    \"phone\": \"8005555555\",\n    \"street1\": \"1 Main St.\",\n    \"street2\": \"Apartment A\",\n    \"city\": \"Anytown\",\n    \"stateProvince\": \"KS\",\n    \"postalCode\": \"12345\",\n    \"country\": \"USA\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/contacts/{{contactId}}",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "contacts",
+                    "{{contactId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Missing Required Field  (LastName)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "",
+                      "const res = pm.response.json();",
+                      "",
+                      "pm.test(\"Status should be 400\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"lastName error should exist\", function () {",
+                      "    pm.expect(res.errors).to.have.property(\"lastName\");",
+                      "});",
+                      "",
+                      "pm.test(\"lastName should be required type\", function () {",
+                      "    pm.expect(res.errors.lastName.kind).to.eql(\"required\");",
+                      "});",
+                      "",
+                      "",
+                      "",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"firstName\": \"{{firstName}}\",\n    \"lastName\": \"\",\n    \"birthdate\": \"1970-01-01\",\n    \"email\": \"contact1@fake.com\",\n    \"phone\": \"8005555555\",\n    \"street1\": \"1 Main St.\",\n    \"street2\": \"Apartment A\",\n    \"city\": \"Anytown\",\n    \"stateProvince\": \"KS\",\n    \"postalCode\": \"12345\",\n    \"country\": \"USA\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/contacts/{{contactId}}",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "contacts",
+                    "{{contactId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Missing Required Field  (Both)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const res = pm.response.json();",
+                      "",
+                      "pm.test(\"Status should be 400\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"firstName error should exist\", function () {",
+                      "    pm.expect(res.errors).to.have.property(\"firstName\");",
+                      "});",
+                      "",
+                      "pm.test(\"lastName error should exist\", function () {",
+                      "    pm.expect(res.errors).to.have.property(\"lastName\");",
+                      "});",
+                      "",
+                      "pm.test(\"firstName should be required type\", function () {",
+                      "    pm.expect(res.errors.firstName.kind).to.eql(\"required\");",
+                      "});",
+                      "",
+                      "pm.test(\"lastName should be required type\", function () {",
+                      "    pm.expect(res.errors.lastName.kind).to.eql(\"required\");",
+                      "});",
+                      "",
+                      "pm.test(\"Should contain exactly 2 validation errors\", function () {",
+                      "    pm.expect(Object.keys(res.errors).length).to.eql(2);",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"firstName\": \"\",\n    \"lastName\": \"\",\n    \"birthdate\": \"1970-01-01\",\n    \"email\": \"contact1@fake.com\",\n    \"phone\": \"8005555555\",\n    \"street1\": \"1 Main St.\",\n    \"street2\": \"Apartment A\",\n    \"city\": \"Anytown\",\n    \"stateProvince\": \"KS\",\n    \"postalCode\": \"12345\",\n    \"country\": \"USA\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/contacts/{{contactId}}",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "contacts",
+                    "{{contactId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Long Last Name",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const res = pm.response.json();",
+                      "",
+                      "pm.test(\"Status should be 400\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"lastName error should exist\", function () {",
+                      "    pm.expect(res.errors).to.have.property(\"lastName\");",
+                      "});",
+                      "",
+                      "pm.test(\"Error type should be maxlength\", function () {",
+                      "    pm.expect(res.errors.lastName.kind).to.eql(\"maxlength\");",
+                      "});",
+                      "",
+                      "pm.test(\"Maximum length should be 20\", function () {",
+                      "    pm.expect(res.errors.lastName.properties.maxlength).to.eql(20);",
+                      "});",
+                      "",
+                      "pm.test(\"Returned invalid value should match sent value\", function () {",
+                      "    pm.expect(res.errors.lastName.value)",
+                      "        .to.eql(\"This is a long last name to test\");",
+                      "});",
+                      "",
+                      "pm.test(\"Should contain exactly 1 validation error\", function () {",
+                      "    pm.expect(Object.keys(res.errors).length).to.eql(1);",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"firstName\": \"Contact 1\",\n    \"lastName\": \"{{longLastName}}\",\n    \"birthdate\": \"1970-01-01\",\n    \"email\": \"contact1@fake.com\",\n    \"phone\": \"8005555555\",\n    \"street1\": \"1 Main St.\",\n    \"street2\": \"Apartment A\",\n    \"city\": \"Anytown\",\n    \"stateProvince\": \"KS\",\n    \"postalCode\": \"12345\",\n    \"country\": \"USA\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/contacts/{{contactId}}",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "contacts",
+                    "{{contactId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Long First Name",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const res = pm.response.json();",
+                      "",
+                      "pm.test(\"Status should be 400\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"firstName error should exist\", function () {",
+                      "    pm.expect(res.errors).to.have.property(\"firstName\");",
+                      "});",
+                      "",
+                      "pm.test(\"Error type should be maxlength\", function () {",
+                      "    pm.expect(res.errors.firstName.kind).to.eql(\"maxlength\");",
+                      "});",
+                      "",
+                      "pm.test(\"Maximum length should be 20\", function () {",
+                      "    pm.expect(res.errors.firstName.properties.maxlength).to.eql(20);",
+                      "});",
+                      "",
+                      "pm.test(\"Returned invalid value should match sent value\", function () {",
+                      "    pm.expect(res.errors.firstName.value)",
+                      "        .to.eql(\"This is a long first name to test\");",
+                      "});",
+                      "",
+                      "pm.test(\"Should contain exactly 1 validation error\", function () {",
+                      "    pm.expect(Object.keys(res.errors).length).to.eql(1);",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"firstName\": \"{{longFirtsName}}\",\n    \"lastName\": \"Contact 1\",\n    \"birthdate\": \"1970-01-01\",\n    \"email\": \"contact1@fake.com\",\n    \"phone\": \"8005555555\",\n    \"street1\": \"1 Main St.\",\n    \"street2\": \"Apartment A\",\n    \"city\": \"Anytown\",\n    \"stateProvince\": \"KS\",\n    \"postalCode\": \"12345\",\n    \"country\": \"USA\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/contacts/{{contactId}}",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "contacts",
+                    "{{contactId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Invalid Birth Date",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const res = pm.response.json();",
+                      "",
+                      "pm.test(\"Status should be 400\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"Birthdate error should exist\", function () {",
+                      "    pm.expect(res.errors).to.have.property(\"birthdate\");",
+                      "});",
+                      "",
+                      "pm.test(\"Error kind should be user defined\", function () {",
+                      "    pm.expect(res.errors.birthdate.kind).to.eql(\"user defined\");",
+                      "});",
+                      "",
+                      "pm.test(\"Error message should indicate invalid birthdate\", function () {",
+                      "    pm.expect(res.errors.birthdate.message).to.include(\"invalid\");",
+                      "});",
+                      "",
+                      "pm.test(\"Returned invalid value should match sent value\", function () {",
+                      "    pm.expect(res.errors.birthdate.value).to.eql(\"1977-02-29\");",
+                      "});",
+                      "",
+                      "pm.test(\"Should contain exactly 1 validation error\", function () {",
+                      "    pm.expect(Object.keys(res.errors).length).to.eql(1);",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"firstName\": \"{{firstname}}\",\n    \"lastName\": \"{{lastname}}\",\n    \"birthdate\": \"{{invalidBirthDate}}\",\n    \"email\": \"contact1@fake.com\",\n    \"phone\": \"8005555555\",\n    \"street1\": \"1 Main St.\",\n    \"street2\": \"Apartment A\",\n    \"city\": \"Anytown\",\n    \"stateProvince\": \"KS\",\n    \"postalCode\": \"12345\",\n    \"country\": \"USA\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/contacts/{{contactId}}",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "contacts",
+                    "{{contactId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Invalid Email",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const res = pm.response.json();",
+                      "",
+                      "pm.test(\"Status should be 400\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"Email error should exist\", function () {",
+                      "    pm.expect(res.errors).to.have.property(\"email\");",
+                      "});",
+                      "",
+                      "pm.test(\"Error kind should be user defined\", function () {",
+                      "    pm.expect(res.errors.email.kind).to.eql(\"user defined\");",
+                      "});",
+                      "",
+                      "pm.test(\"Error message should indicate invalid email\", function () {",
+                      "    pm.expect(res.errors.email.message).to.include(\"invalid\");",
+                      "});",
+                      "",
+                      "pm.test(\"Returned invalid value should match sent value\", function () {",
+                      "    pm.expect(res.errors.email.value).to.eql(\"email.com\");",
+                      "});",
+                      "",
+                      "pm.test(\"Should contain exactly 1 validation error\", function () {",
+                      "    pm.expect(Object.keys(res.errors).length).to.eql(1);",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"firstName\": \"{{firstname}}\",\n    \"lastName\": \"{{lastname}}\",\n    \"birthdate\": \"{{birthDate}}\",\n    \"email\": \"{{invalidEmail}}\",\n    \"phone\": \"8005555555\",\n    \"street1\": \"1 Main St.\",\n    \"street2\": \"Apartment A\",\n    \"city\": \"Anytown\",\n    \"stateProvince\": \"KS\",\n    \"postalCode\": \"12345\",\n    \"country\": \"USA\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/contacts/{{contactId}}",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "contacts",
+                    "{{contactId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Invalid Phone Number",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const res = pm.response.json();",
+                      "",
+                      "pm.test(\"Status should be 400\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"Phone error should exist\", function () {",
+                      "    pm.expect(res.errors).to.have.property(\"phone\");",
+                      "});",
+                      "",
+                      "pm.test(\"Error kind should be user defined\", function () {",
+                      "    pm.expect(res.errors.phone.kind).to.eql(\"user defined\");",
+                      "});",
+                      "",
+                      "pm.test(\"Error message should indicate invalid phone\", function () {",
+                      "    pm.expect(res.errors.phone.message).to.include(\"invalid\");",
+                      "});",
+                      "",
+                      "pm.test(\"Invalid value should be 12\", function () {",
+                      "    pm.expect(res.errors.phone.value).to.eql(\"12\");",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"firstName\": \"{{firstName}}\",\n    \"lastName\": \"{{lastName}}\",\n    \"birthdate\": \"{{birthdate}}\",\n    \"email\": \"{{validemail}}\",\n    \"phone\": \"{{invalidPhone}}\",\n    \"street1\": \"1 Main St.\",\n    \"street2\": \"Apartment A\",\n    \"city\": \"Anytown\",\n    \"stateProvince\": \"KS\",\n    \"postalCode\": \"12345\",\n    \"country\": \"USA\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/contacts/{{contactId}}",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "contacts",
+                    "{{contactId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Long Street Name",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const res = pm.response.json();",
+                      "",
+                      "pm.test(\"Status should be 400\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"street1 error should exist\", function () {",
+                      "    pm.expect(res.errors).to.have.property(\"street1\");",
+                      "});",
+                      "",
+                      "pm.test(\"Error type should be maxlength\", function () {",
+                      "    pm.expect(res.errors.street1.kind).to.eql(\"maxlength\");",
+                      "});",
+                      "",
+                      "pm.test(\"Maximum length should be 40\", function () {",
+                      "    pm.expect(res.errors.street1.properties.maxlength).to.eql(40);",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"firstName\": \"{{firstname}}\",\n    \"lastName\": \"{{lastname}}\",\n    \"birthdate\": \"{{birthdate}}\",\n    \"email\": \"{{validemail}}\",\n    \"phone\": \"8005555555\",\n    \"street1\": \"{{longStreetName}}\",\n    \"street2\": \"Apartment A\",\n    \"city\": \"Anytown\",\n    \"stateProvince\": \"KS\",\n    \"postalCode\": \"12345\",\n    \"country\": \"USA\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/contacts/{{contactId}}",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "contacts",
+                    "{{contactId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Invalid Postal Code",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const res = pm.response.json();",
+                      "",
+                      "pm.test(\"Status should be 400\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"PostalCode error should exist\", function () {",
+                      "    pm.expect(res.errors).to.have.property(\"postalCode\");",
+                      "});",
+                      "",
+                      "pm.test(\"Error kind should be user defined\", function () {",
+                      "    pm.expect(res.errors.postalCode.kind).to.eql(\"user defined\");",
+                      "});",
+                      "",
+                      "pm.test(\"Error message should indicate invalid postal code\", function () {",
+                      "    pm.expect(res.errors.postalCode.message).to.include(\"invalid\");",
+                      "});",
+                      "",
+                      "pm.test(\"Returned invalid value should match sent value\", function () {",
+                      "    pm.expect(res.errors.postalCode.value).to.eql(\"12\");",
+                      "});",
+                      "",
+                      "pm.test(\"Should contain exactly 1 validation error\", function () {",
+                      "    pm.expect(Object.keys(res.errors).length).to.eql(1);",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"firstName\": \"{{firstname}}\",\n    \"lastName\": \"{{lastname}}\",\n    \"birthdate\": \"{{birthDate}}\",\n    \"email\": \"{{validemail}}\",\n    \"phone\": \"8005555555\",\n    \"street1\": \"1 Main St.\",\n    \"street2\": \"Apartment A\",\n    \"city\": \"Anytown\",\n    \"stateProvince\": \"KS\",\n    \"postalCode\": \"12\",\n    \"country\": \"USA\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/contacts/{{contactId}}",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "contacts",
+                    "{{contactId}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Get Contact List - Unauthor",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 401\", function () {",
+                  "    pm.response.to.have.status(401);",
+                  "});",
+                  "",
+                  "pm.test(\"Response body contains error message\", function () {",
+                  "    pm.expect(pm.response.text()).to.include(\"Please authenticate.\");",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"amanda@fake.com\",\n    \"password\": \"myPassword\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/contacts",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "contacts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Contact - Not Found",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"amanda@fake.com\",\n    \"password\": \"myPassword\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/contacts/6999b6bc1bd83900155846f1",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "contacts",
+                "6999b6bc1bd83900155846f1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cleanup - Delete Contact",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/contacts/{{contactId}}",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "contacts",
+                "{{contactId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          "// Arrays de nomes",
+          "var firstNames = [\"Emily\",\"Michael\",\"Jessica\",\"Matthew\",\"Ashley\",",
+          "\"Jacob\",\"Sarah\",\"Christopher\",\"Samantha\",\"Joshua\",",
+          "\"Taylor\",\"Nicholas\",\"Hannah\",\"Tyler\",\"Alexis\",",
+          "\"Brandon\",\"Rachel\",\"Austin\",\"Elizabeth\",\"Andrew\"];",
+          "",
+          "var lastNames = [\"Smith\",\"Johnson\",\"Williams\",\"Jones\",\"Brown\",",
+          "\"Davis\",\"Miller\",\"Wilson\",\"Moore\",\"Taylor\",",
+          "\"Anderson\",\"Thomas\",\"Jackson\",\"White\",\"Harris\",",
+          "\"Martin\",\"Thompson\",\"Garcia\",\"Martinez\",\"Robinson\"];",
+          "",
+          "// Função helper para pegar item aleatório",
+          "function randomItem(array){",
+          "    return array[Math.floor(Math.random() * array.length)];",
+          "}",
+          "",
+          "// Nome",
+          "var firstName = randomItem(firstNames);",
+          "var lastName = randomItem(lastNames);",
+          "",
+          "pm.variables.set(\"firstName\", firstName);",
+          "pm.variables.set(\"lastName\", lastName);",
+          "",
+          "",
+          "// Birthdate ",
+          "var moment = require(\"moment\"); ",
+          "var randomDays = Math.floor(Math.random() * (180 - 1 + 1)) + 1;",
+          "var date = moment().add(randomDays, \"days\");",
+          "pm.variables.set(\"birthDate\", date.format(\"YYYY-MM-DD\"));",
+          "",
+          "// Email baseado no nome",
+          "var email = firstName.toLowerCase() + \".\" + lastName.toLowerCase() + \"@fake.com\";",
+          "pm.variables.set(\"validemail\", email);",
+          "",
+          "// Telefone aleatório 10 dígitos",
+          "var phone = \"8\" + Math.floor(100000000 + Math.random() * 900000000);",
+          "pm.variables.set(\"phone\", phone);",
+          "",
+          "// Endereço simples dinâmico",
+          "pm.variables.set(\"street1\", Math.floor(Math.random() * 999) + \" Main St.\");",
+          "pm.variables.set(\"street2\", \"Apartment \" + String.fromCharCode(65 + Math.floor(Math.random() * 5)));",
+          "pm.variables.set(\"city\", \"Anytown\");",
+          "pm.variables.set(\"stateProvince\", \"KS\");",
+          "pm.variables.set(\"postalCode\", String(Math.floor(10000 + Math.random() * 90000)));",
+          "pm.variables.set(\"country\", \"USA\");"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          "pm.test(\"Response time is less than 3000ms\", function () {",
+          "    pm.expect(pm.response.responseTime).to.be.below(3000);",
+          "});"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "invalidBirthDate",
+      "value": "1977-02-29"
+    },
+    {
+      "key": "invalidEmail",
+      "value": "email.com"
+    },
+    {
+      "key": "longLastName",
+      "value": "This is a long last name to test"
+    },
+    {
+      "key": "longFirtsName",
+      "value": "This is a long first name to test"
+    },
+    {
+      "key": "invalidPhone",
+      "value": "12"
+    },
+    {
+      "key": "invalidPostalCode",
+      "value": "10"
+    },
+    {
+      "key": "longStreetName",
+      "value": "This is a long street name to test more.."
+    }
+  ]
+}
