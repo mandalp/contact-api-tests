@@ -4,7 +4,8 @@
   "description": "API testing using Postman and Newman",
   "main": "index.js",
   "scripts": {
-    "test": "newman run collections/ContactList.postman_collection.json -e environments/ContactEnvironment.postman_environment.json"
+    "test": "newman run collections/ContactList.postman_collection.json -e environments/ContactEnvironment.postman_environment.json",
+    "test:report": "newman run collections/ContactList.postman_collection.json -e environments/ContactEnvironment.postman_environment.json -r cli,htmlextra --reporter-htmlextra-export ./reports/newman-report.html"
   },
   "repository": {
     "type": "git",
