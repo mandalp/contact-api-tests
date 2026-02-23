@@ -77,6 +77,10 @@ Run the tests:
 
     npm test
 
+Generate a html newman Report:
+
+    npm run test:report
+
 ---
 
 ## Continuous Integration
